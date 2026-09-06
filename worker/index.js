@@ -105,13 +105,23 @@ function buildPage(request) {
     @media(min-width:46rem){.shell{padding-top:2rem;padding-bottom:3rem}.topbar{margin-bottom:1.25rem}.hero{padding:1.8rem}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:1rem}.span-2{grid-column:1/-1}.card-head{padding:1.15rem 1.15rem .85rem}.facts,.history-list,.location-body{padding-left:1.1rem;padding-right:1.1rem;padding-bottom:1.05rem}}
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition-duration:.01ms!important}}
     [hidden]{display:none!important}.card-note{margin:0 1rem 1rem;color:var(--muted);font-size:.875rem;line-height:1.5}.retry-wrap{padding:0 1rem}.retry-wrap:has(button:not([hidden])){padding-bottom:1rem}a{color:var(--cyan)}.fact dt,.fact dd,.button,.location-copy{font-size:1rem}.source,.brand-sub,.eyebrow,.privacy-note,.history-time,.accuracy{font-size:.8125rem}.history-ip,.history-place{font-size:.875rem}.history-num{font-size:.75rem}.card-head{flex-wrap:wrap}.history-time{white-space:normal;max-width:7rem}.fact{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)}.hero:after{z-index:0}.hero>*{z-index:1}.location-copy{line-height:1.6}
+    .ip-checks{position:relative;display:grid;grid-template-columns:minmax(0,1fr);gap:.75rem;margin-top:1.25rem}.ip-check{min-width:0;padding:1rem;border:1px solid var(--line2);border-radius:1rem;background:rgba(3,10,18,.35)}.ip-check-heading{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.7rem}.ip-check-heading h2{font-size:1rem;margin:0;color:var(--cyan)}.address{font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;font-size:clamp(1rem,3.8vw,1.35rem);line-height:1.5;overflow-wrap:anywhere}.ip-check p,.ip-check-footer p,.ip-help p{color:var(--muted);font-size:.875rem;line-height:1.6;margin:.5rem 0 0}.ip-check-footer{position:relative;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin:.85rem 0}.ip-check-footer p{flex:1 1 12rem;margin:0}.ip-help{position:relative;border-top:1px solid var(--line);padding-top:.9rem}.ip-help summary{cursor:pointer;font-size:1rem;color:var(--text)}.ip-help p{font-size:1rem}.icon-btn:disabled{opacity:.5}.ip-check .button:disabled{cursor:default}
+    @media(min-width:46rem){.ip-checks{grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media(max-width:360px){.history-item{grid-template-columns:2rem minmax(0,1fr)}.history-time{grid-column:2;text-align:left;max-width:none}}
   </style>
 </head>
 <body>
   <main class="shell">
     <header class="topbar"><div class="brand"><div class="mark" aria-hidden="true"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M12 7a5 5 0 1 0 5 5"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><path d="M16.5 3.8 20.2 7.5M18.2 3.8h-1.7v1.7M20.2 5.8V7.5h-1.7"/></svg></div><div><div class="brand-title">DeviceScope</div><div class="brand-sub">What this site can see</div></div></div><div class="live"><span class="pulse"></span>This visit</div></header>
-    <section class="hero" aria-labelledby="ip-title"><div class="eyebrow" id="ip-title">Your public IP address</div><div class="ip-row"><div class="ip" id="current-ip">${escapeHtml(current.ip)}</div><button class="icon-btn" id="copy-ip" type="button" aria-label="Copy IP address" title="Copy IP address"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M15 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h3"/></svg></button></div><div class="hero-meta" id="hero-meta"><span>${escapeHtml(current.location)}</span><span class="dot">•</span><span>${escapeHtml(current.organization || "Network provider unavailable")}</span></div></section>
+    <section class="hero" aria-labelledby="ip-title"><div class="eyebrow" id="ip-title">IP seen by DeviceScope</div><div class="ip-row"><div class="ip" id="current-ip">${escapeHtml(current.ip)}</div><button class="icon-btn" id="copy-ip" type="button" aria-label="Copy IP address" title="Copy IP address"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M15 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h3"/></svg></button></div><div class="hero-meta" id="hero-meta"><span>${escapeHtml(current.location)}</span><span class="dot">•</span><span>${escapeHtml(current.organization || "Network provider unavailable")}</span></div>
+      <div class="ip-checks" aria-label="Public IPv4 and IPv6">
+        <div class="ip-check"><div class="ip-check-heading"><h2>IPv4</h2><button class="button" id="copy-ipv4" type="button" disabled aria-label="Copy public IPv4 address">Copy</button></div><div class="address" id="ipv4-address">Checking…</div><p id="ipv4-status" role="status">Checking IPv4 separately…</p></div>
+        <div class="ip-check"><div class="ip-check-heading"><h2>IPv6</h2><button class="button" id="copy-ipv6" type="button" disabled aria-label="Copy public IPv6 address">Copy</button></div><div class="address" id="ipv6-address">Checking…</div><p id="ipv6-status" role="status">Checking IPv6 separately…</p></div>
+      </div>
+      <div class="ip-check-footer"><p id="ip-check-summary" role="status">Checking both public address types…</p><button class="button" id="retry-addresses" type="button">Recheck IPs</button></div>
+      <details class="ip-help"><summary>Which IP does my device use?</summary><p>You can have both. Each connection uses one IP version. Browsers generally prefer IPv6 when available and quickly try IPv4 too if needed, using a working connection without a long wait. The website, network, and connection speed affect the choice, so there is no fixed “primary” IP for every site.</p><p>The large address above is what DeviceScope saw on this page request. The separate checks show your public addresses as seen by ipify. A VPN, iCloud Private Relay, or network translation can change these addresses; they are not necessarily assigned directly to your device.</p><p>“Not detected” means a check could not confirm an address. Your network may lack that connection type, or the check may be blocked or temporarily unavailable.</p></details>
+      <noscript><p>Enable JavaScript to check IPv4 and IPv6 separately.</p></noscript>
+    </section>
     <div class="grid">
       <section class="card" aria-labelledby="connection-title"><div class="card-head"><h2 class="card-title" id="connection-title"><svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12.55a11 11 0 0 1 14.08 0M8.5 16.05a6 6 0 0 1 7 0M12 20h.01M1.5 9a16 16 0 0 1 21 0"/></svg>Connection</h2><span class="source" id="connection-source">This connection</span></div><dl class="facts" id="connection-facts"></dl><p class="card-note" id="network-note" role="status">Reading connection details…</p><div class="retry-wrap"><button class="button" id="retry-network" type="button" hidden>Retry IP lookup</button></div></section>
       <section class="card" aria-labelledby="device-title"><div class="card-head"><h2 class="card-title" id="device-title"><svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>Device & browser</h2><span class="source">Browser-reported</span></div><dl class="facts" id="device-facts"><div class="fact"><dt>Detecting</dt><dd class="skeleton">Reading this browser…</dd></div></dl></section>
@@ -119,7 +129,7 @@ function buildPage(request) {
       <section class="card span-2" aria-labelledby="history-title"><div class="card-head"><h2 class="card-title" id="history-title"><svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/></svg>Recent IP history</h2><button class="button danger" id="clear-history" type="button">Clear</button></div><ul class="history-list" id="history-list"></ul></section>
       <details class="card span-2"><summary>Technical details <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></summary><dl class="facts" id="technical-facts"></dl><p class="card-note">Some details are deliberately not exposed by browsers. Exact device model, Wi-Fi name, MAC address, and private IP are not available to this page. Browser and OS labels are estimates from the user agent, which may be reduced or spoofed.</p></details>
     </div>
-    <p class="privacy-note">Recent IP history is stored in a first-party cookie in this browser (up to one year), sent back to this site on visits, and not stored in an app database. Safari may remove it sooner. Missing provider/location details are looked up through <a href="https://ipwhois.io/documentation" target="_blank" rel="noopener noreferrer">ipwho.is</a> using the displayed IP; previous IPs and precise location are never sent to that service.</p>
+    <p class="privacy-note">Recent IP history is stored in a first-party cookie in this browser (up to one year), sent back to this site on visits, and not stored in an app database. Safari may remove it sooner. IPv4 and IPv6 checks connect directly to <a href="https://www.ipify.org/" target="_blank" rel="noopener noreferrer">ipify</a>, which sees the public address used for each check. Both detected address types can appear in your recent history. Missing provider/location details are looked up through <a href="https://ipwhois.io/documentation" target="_blank" rel="noopener noreferrer">ipwho.is</a> using the IP seen by DeviceScope; previous IPs and precise location are never sent to that service.</p>
   </main><div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script>
     const DATA=${payload};
@@ -165,7 +175,7 @@ function buildPage(request) {
       const wait=entry?.responseStart>entry?.requestStart&&entry.requestStart>0?Math.round(entry.responseStart-entry.requestStart):null;
       const missing=lookupState==="loading"?"Looking up…":lookupState==="failed"?"Lookup unavailable":"Not in IP database";
       const rows=[
-        ["Public IP version",validIp(c.ip)?(c.ip.includes(":")?"IPv6":"IPv4"):"Not detected"],
+        ["Version seen by site",validIp(c.ip)?(c.ip.includes(":")?"IPv6":"IPv4"):"Not detected"],
         ["Provider / network",c.organization||missing],["ASN",c.asn?String(c.asn).replace(/^AS/i,"AS").replace(/^(?!AS)/,"AS"):missing],
         ["Approx. location",c.location!=="Unknown location"?c.location:missing],
         ["Page transport",location.protocol==="https:"?"HTTPS":"HTTP"],
@@ -211,8 +221,54 @@ function buildPage(request) {
         ["Network data source",networkSource]
       ]);
     }
+    const addressChecks={4:{ip:null,state:"idle"},6:{ip:null,state:"idle"}};
+    let addressesActive=false;
+    const recordedAddresses=new Set(validIp(c.ip)?[c.ip]:[]);
+    const ipVersion=ip=>validIp(ip)?(ip.includes(":")?6:4):null;
+    function currentAddresses(){return new Set([c.ip,addressChecks[4].ip,addressChecks[6].ip].filter(validIp))}
+    function renderAddresses(){
+      const siteVersion=ipVersion(c.ip);
+      for(const version of [4,6]){
+        const check=addressChecks[version],address=check.ip||(siteVersion===version?c.ip:null);
+        $("#ipv"+version+"-address").textContent=address||(check.state==="loading"?"Checking…":"Not detected");
+        $("#copy-ipv"+version).disabled=!address;
+        $("#ipv"+version+"-status").textContent=check.ip?(check.ip===c.ip?"Seen by ipify and DeviceScope.":"Seen by ipify for this check."):address?(check.state==="loading"?"Seen by DeviceScope · checking ipify…":"Seen by DeviceScope · separate check unavailable."):(check.state==="loading"?"Checking IPv"+version+" separately…":"Could not confirm IPv"+version+". It may be unavailable or the check may be blocked.");
+      }
+      const versions=new Set([...currentAddresses()].map(ipVersion));
+      $("#ip-check-summary").textContent=addressesActive?"Checking both public address types…":versions.size===2?"Both IPv4 and IPv6 public addresses detected.":versions.size===1?"Only IPv"+[...versions][0]+" was detected by these checks.":"Neither address type could be confirmed. Try checking again.";
+      $("#retry-addresses").disabled=addressesActive;
+      $("#retry-addresses").textContent=addressesActive?"Checking…":"Recheck IPs";
+    }
+    function rememberAddress(ip){
+      if(historyCleared||recordedAddresses.has(ip))return;
+      recordedAddresses.add(ip);
+      const existing=DATA.history.find(item=>item.i===ip),now=Date.now();
+      DATA.history=[{i:ip,t:now,f:existing?.f||now,n:Math.min((existing?.n||0)+1,9999),l:existing?.l||"Location not looked up"},...DATA.history.filter(item=>item.i!==ip)].slice(0,6);
+      while(encodeURIComponent(JSON.stringify(DATA.history)).length>3500&&DATA.history.length>1)DATA.history.pop();
+      persistHistory();renderHistory();
+    }
+    async function checkAddresses(){
+      if(addressesActive)return;
+      addressesActive=true;
+      for(const version of [4,6])addressChecks[version]={ip:null,state:"loading"};
+      renderAddresses();renderHistory();
+      await Promise.all([4,6].map(async version=>{
+        const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),8000);
+        try{
+          const host=version===4?"api.ipify.org":"api6.ipify.org";
+          const response=await fetch("https://"+host+"?format=json&t="+Date.now(),{signal:controller.signal,credentials:"omit",referrerPolicy:"no-referrer",cache:"no-store"});
+          if(!response.ok)throw new Error("Address check unavailable");
+          const result=await response.json();
+          if(ipVersion(result.ip)!==version)throw new Error("Unexpected address type");
+          addressChecks[version]={ip:result.ip,state:"done"};
+          rememberAddress(result.ip);
+        }catch{addressChecks[version]={ip:null,state:"failed"}}
+        finally{clearTimeout(timer);renderAddresses();renderHistory()}
+      }));
+      addressesActive=false;renderAddresses();
+    }
     function renderHistory(){
-      $("#history-list").innerHTML=DATA.history.length?DATA.history.map((item,index)=>'<li class="history-item"><span class="history-num">'+(item.i===c.ip?"NOW":String(index+1).padStart(2,"0"))+'</span><div><div class="history-ip">'+escapeText(item.i)+'</div><div class="history-place">'+escapeText(item.l||"Unknown location")+(item.n>1?" · "+item.n+" visits":"")+'</div></div><time class="history-time" datetime="'+new Date(item.t).toISOString()+'">'+escapeText(formatTime(item.t))+'</time></li>').join(""):'<li class="card-note">History cleared. A new entry is saved on your next visit.</li>';
+      $("#history-list").innerHTML=DATA.history.length?DATA.history.map((item,index)=>'<li class="history-item"><span class="history-num">'+(currentAddresses().has(item.i)?"NOW":String(index+1).padStart(2,"0"))+'</span><div><div class="history-ip">'+escapeText(item.i)+'</div><div class="history-place">'+(ipVersion(item.i)===6?"IPv6":"IPv4")+" · "+escapeText(item.l||"Unknown location")+(item.n>1?" · "+item.n+" visits":"")+'</div></div><time class="history-time" datetime="'+new Date(item.t).toISOString()+'">'+escapeText(formatTime(item.t))+'</time></li>').join(""):'<li class="card-note">History cleared. A new entry is saved on your next visit.</li>';
       $("#clear-history").disabled=!DATA.history.length;
     }
     function persistHistory(){
@@ -248,15 +304,18 @@ function buildPage(request) {
       }catch(error){lookupState="failed";lookupMessage=error.name==="AbortError"?"IP lookup timed out; you can retry.":error.message==="Failed to fetch"?"IP lookup was blocked or could not be reached. You can retry.":error.message}
       finally{clearTimeout(timer);lookupActive=false;renderConnection();renderDevice()}
     }
-    $("#copy-ip").addEventListener("click",async()=>{
-      if(!validIp(c.ip)){toast("No IP address to copy");return}
-      try{await nav.clipboard.writeText(c.ip);toast("IP address copied")}
+    async function copyAddress(ip){
+      if(!validIp(ip)){toast("No IP address to copy");return}
+      try{await nav.clipboard.writeText(ip);toast("IP address copied")}
       catch{
-        const a=document.createElement("textarea");a.value=c.ip;a.readOnly=true;a.style.cssText="position:fixed;top:0;left:0;opacity:0;font-size:16px";document.body.append(a);
+        const a=document.createElement("textarea");a.value=ip;a.readOnly=true;a.style.cssText="position:fixed;top:0;left:0;opacity:0;font-size:16px";document.body.append(a);
         a.focus();a.select();a.setSelectionRange(0,a.value.length);
         let copied=false;try{copied=document.execCommand("copy")}catch{}a.remove();toast(copied?"IP address copied":"Copy unavailable; select the IP address to copy");
       }
-    });
+    }
+    $("#copy-ip").addEventListener("click",()=>copyAddress(c.ip));
+    for(const version of [4,6])$("#copy-ipv"+version).addEventListener("click",()=>copyAddress(addressChecks[version].ip||(ipVersion(c.ip)===version?c.ip:null)));
+    $("#retry-addresses").addEventListener("click",checkAddresses);
     $("#clear-history").addEventListener("click",()=>{
       document.cookie=COOKIE+"=; Max-Age=0; Path=/; Secure; SameSite=Lax";
       // Clean up the incorrectly named cookie written by the first version.
@@ -283,6 +342,7 @@ function buildPage(request) {
     window.addEventListener("load",renderConnection);
     connection?.addEventListener?.("change",renderConnection);
     if(!c.organization||!c.asn||c.location==="Unknown location")lookupNetwork();
+    checkAddresses();
   </script>
 </body></html>`, history };
 }
@@ -302,7 +362,7 @@ export default {
     const { html, history } = buildPage(request);
     return new Response(html, { headers: {
       "content-type": "text/html; charset=utf-8", "cache-control": "private, no-store, max-age=0",
-      "content-security-policy": "default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://ipwho.is; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
+      "content-security-policy": "default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://ipwho.is https://api.ipify.org https://api6.ipify.org; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
       "permissions-policy": "geolocation=(self), camera=(), microphone=()", "referrer-policy": "no-referrer", "x-content-type-options": "nosniff",
       "set-cookie": HISTORY_COOKIE + "=" + encodeURIComponent(JSON.stringify(history)) + "; Max-Age=31536000; Path=/; Secure; SameSite=Lax",
     }});

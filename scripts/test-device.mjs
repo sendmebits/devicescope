@@ -18,7 +18,14 @@ async function runClient(html, mode="success") {
   const navigator={userAgent:"Mozilla/5.0 (iPhone; CPU iPhone OS 18_6 like Mac OS X) AppleWebKit/605.1.15 Version/18.6 Mobile/15E148 Safari/604.1",platform:"iPhone",vendor:"Apple Computer, Inc.",maxTouchPoints:5,hardwareConcurrency:6,language:"en-CA",languages:["en-CA"],cookieEnabled:true,onLine:true,geolocation:{getCurrentPosition(success,error){error({code:1})}}};
   const sandbox={document,navigator,screen:{width:390,height:844,colorDepth:24},innerWidth:390,innerHeight:720,devicePixelRatio:3,location:{protocol:"https:"},performance:{getEntriesByType(){return [{nextHopProtocol:"h2",requestStart:10,responseStart:52}]}},URL,AbortController,Intl,Date,console,
     setTimeout(fn,ms){const id=timers.size+1;timers.set(id,{fn,ms});return id},clearTimeout(id){timers.delete(id)},
-    fetch:async(url,options)=>{calls.push({url,options});if(mode==="rate")return {ok:false,status:429};if(mode==="blocked")throw new TypeError("Failed to fetch");if(mode==="timeout")throw Object.assign(new Error("Timed out"),{name:"AbortError"});return {ok:true,json:async()=>({...fixture,...(mode==="mismatch"?{ip:"1.1.1.1"}:mode==="ipv6"?{ip:"2001:4860:4860::8888"}:{})})}}
+    fetch:async(url,options)=>{calls.push({url,options});
+      if(url.includes("ipify.org")){
+        if(mode==="blocked"||mode==="ipv4only"&&url.includes("api6."))throw new TypeError("Failed to fetch");
+        if(mode==="timeout")throw Object.assign(new Error("Timed out"),{name:"AbortError"});
+        if(mode==="rate")return {ok:false,status:429};
+        return {ok:true,json:async()=>({ip:mode==="mismatch"?"not an address":url.includes("api6.")?"2001:db8::1234":"192.0.2.25"})};
+      }
+      if(mode==="rate")return {ok:false,status:429};if(mode==="blocked")throw new TypeError("Failed to fetch");if(mode==="timeout")throw Object.assign(new Error("Timed out"),{name:"AbortError"});return {ok:true,json:async()=>({...fixture,...(mode==="mismatch"?{ip:"1.1.1.1"}:mode==="ipv6"?{ip:"2001:4860:4860::8888"}:{})})}}
   };
   sandbox.window=sandbox;sandbox.addEventListener=()=>{};sandbox.matchMedia=()=>({matches:false});
   const context=vm.createContext(sandbox);
@@ -62,7 +69,7 @@ const malformed=await page("8.8.8.8","devicescope_history="+encodeURIComponent(J
 assert.ok(!malformed.html.includes('"i":"1.1.1.1"'));
 const junk=await page("<script>alert(1)</script>");
 assert.ok(junk.html.includes('"ip":"Unavailable"'));
-assert.equal((await runClient(junk.html)).calls.length,0);
+assert.equal((await runClient(junk.html)).calls.filter(x=>x.url.includes("ipwho.is")).length,0);
 for(const mode of ["rate","blocked","timeout","mismatch"]){
   const result=await runClient(html,mode);
   assert.equal(result.elements.get("#retry-network").hidden,false);
@@ -71,7 +78,35 @@ for(const mode of ["rate","blocked","timeout","mismatch"]){
 const ipv6=await page("2001:4860:4860:0:0:0:0:8888");
 assert.ok((await runClient(ipv6.html,"ipv6")).elements.get("#connection-facts").innerHTML.includes("Fixture ISP"));
 const known=await page("8.8.8.8","",{city:"Waterloo",region:"Ontario",country:"CA",asOrganization:"Known network",asn:123,latitude:0,longitude:0});
-assert.equal((await runClient(known.html)).calls.length,0);
+assert.equal((await runClient(known.html)).calls.filter(x=>x.url.includes("ipwho.is")).length,0);
 const notFound=await worker.fetch(new Request("https://device.test/missing"));
 assert.equal(notFound.status,404);
 console.log("Passed: Safari-like client, metadata fallbacks, IP lookup success/failure/timeout/mismatch, IPv6, HTTP timing, denied geolocation, copy failure, cookie history and clear, invalid-cookie handling, known metadata, no-store, CSP, and routes.");
+
+assert.ok(response.headers.get("content-security-policy").includes("https://api6.ipify.org"));
+assert.ok(html.includes('id="ipv4-address"')&&html.includes('id="ipv6-address"'));
+assert.equal(client.elements.get("#ipv4-address").textContent,"192.0.2.25");
+assert.equal(client.elements.get("#ipv6-address").textContent,"2001:db8::1234");
+assert.equal(client.elements.get("#retry-addresses").disabled,false);
+assert.ok(client.elements.get("#ip-check-summary").textContent.includes("Both"));
+const dual=await runClient(html);
+assert.ok(dual.elements.get("#history-list").innerHTML.includes("2001:db8::1234"));
+assert.ok(dual.elements.get("#history-list").innerHTML.includes("192.0.2.25"));
+const historyBefore=dual.cookies.get("devicescope_history");
+await dual.elements.get("#retry-addresses").click();
+assert.equal(dual.cookies.get("devicescope_history"),historyBefore,"Rechecking does not add visits");
+dual.elements.get("#clear-history").click();
+await dual.elements.get("#retry-addresses").click();
+assert.equal(dual.cookies.size,0,"Recheck does not repopulate cleared history");
+for(const mode of ["ipv4only","blocked","timeout","rate","mismatch"]){
+  const result=await runClient(html,mode);
+  assert.equal(result.elements.get("#ipv6-address").textContent,"Not detected");
+  assert.equal(result.elements.get("#copy-ipv6").disabled,true);
+  assert.equal(result.elements.get("#ipv4-address").textContent,mode==="ipv4only"?"192.0.2.25":"8.8.8.8");
+  assert.equal(result.elements.get("#retry-addresses").disabled,false);
+}
+const v6fallback=await runClient(ipv6.html,"blocked");
+assert.equal(v6fallback.elements.get("#ipv6-address").textContent,"2001:4860:4860:0:0:0:0:8888");
+assert.equal(v6fallback.elements.get("#ipv4-address").textContent,"Not detected");
+assert.ok(dual.calls.filter(x=>x.url.includes("ipify.org")).every(x=>x.options.cache==="no-store"&&x.options.credentials==="omit"&&x.options.referrerPolicy==="no-referrer"));
+console.log("Passed: dual addresses, single-family and failed checks, server-address fallback, retry, privacy options, per-family copy state, history deduplication and clear persistence.");
