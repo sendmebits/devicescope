@@ -102,6 +102,8 @@ function buildPage(request) {
     .history-list{list-style:none;margin:0;padding:0 .95rem .9rem}.history-item{display:grid;grid-template-columns:2.3rem minmax(0,1fr) auto;gap:.7rem;align-items:center;padding:.78rem .1rem;border-top:1px solid var(--line)}.history-num{width:2rem;height:2rem;display:grid;place-items:center;color:var(--cyan);background:var(--cyan-soft);border-radius:.65rem;font-size:.67rem;font-weight:760}.history-ip{font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;font-size:.85rem;font-weight:680;overflow-wrap:anywhere}.history-place{margin-top:.18rem;color:var(--muted);font-size:.76rem}.history-time{color:var(--muted);font-size:.75rem;text-align:right;white-space:nowrap}
     .button{min-height:2.75rem;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;border:1px solid var(--line2);border-radius:.82rem;padding:.62rem .88rem;color:var(--text);background:rgba(255,255,255,.04);cursor:pointer;font-weight:670;font-size:.84rem}.button.primary{border-color:rgba(89,225,255,.34);color:#051018;background:linear-gradient(135deg,#7ce9ff,#64d6ff);box-shadow:0 .55rem 1.5rem rgba(46,192,231,.17)}.button.danger{color:var(--danger)}.button:disabled{opacity:.58;cursor:wait}.location-body{padding:0 .95rem .95rem}.location-callout{padding:1rem;border:1px solid var(--line);border-radius:.9rem;background:rgba(3,10,18,.32)}.location-copy{margin:0 0 .85rem;color:#c0d1df;font-size:.86rem;line-height:1.55}.precise{display:none;margin-top:.8rem}.precise.show{display:block}.accuracy{color:var(--muted);font-size:.76rem;margin-top:.3rem}
     details.card>summary{display:flex;align-items:center;justify-content:space-between;min-height:3.5rem;padding:0 1rem;cursor:pointer;list-style:none;font-weight:700}details.card>summary::-webkit-details-marker{display:none}.chevron{color:var(--muted);transition:transform .2s ease}details[open] .chevron{transform:rotate(180deg)}.privacy-note{margin:.85rem .1rem 0;color:#71899d;font-size:.76rem;line-height:1.5;text-align:center}.toast{position:fixed;z-index:20;left:50%;bottom:max(1rem,env(safe-area-inset-bottom));transform:translate(-50%,1rem);padding:.7rem .95rem;border:1px solid var(--line2);border-radius:.8rem;color:var(--text);background:#102337;box-shadow:0 .9rem 2.5rem rgba(0,0,0,.4);font-size:.84rem;opacity:0;pointer-events:none;transition:.2s ease}.toast.show{opacity:1;transform:translate(-50%,0)}.skeleton{color:var(--muted)!important;font-weight:520!important}
+    .location-layout{display:grid;gap:1rem;align-items:start}.location-map{min-width:0;margin:0;border:1px solid var(--line2);border-radius:.9rem;overflow:hidden;background:#081321}.map-heading{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.4rem;padding:.75rem .85rem;font-size:.875rem;font-weight:650}.map-heading span{color:var(--muted);font-weight:400}.map-viewport{height:14rem;background:#102337}.map-viewport iframe{display:block;width:100%;height:100%;border:0;color-scheme:light}.map-empty{height:100%;margin:0;display:grid;place-content:center;padding:1.2rem;color:var(--muted);text-align:center;font-size:.875rem;line-height:1.5}.map-caption{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.2rem .8rem;padding:.25rem .85rem;font-size:.875rem;color:var(--muted)}.map-caption a{display:inline-flex;align-items:center;min-height:2.75rem}.map-caption a:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}.precise{overflow-wrap:anywhere}
+    @media(min-width:46rem){.location-layout{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr)}}
     @media(min-width:46rem){.shell{padding-top:2rem;padding-bottom:3rem}.topbar{margin-bottom:1.25rem}.hero{padding:1.8rem}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:1rem}.span-2{grid-column:1/-1}.card-head{padding:1.15rem 1.15rem .85rem}.facts,.history-list,.location-body{padding-left:1.1rem;padding-right:1.1rem;padding-bottom:1.05rem}}
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition-duration:.01ms!important}}
     [hidden]{display:none!important}.card-note{margin:0 1rem 1rem;color:var(--muted);font-size:.875rem;line-height:1.5}.retry-wrap{padding:0 1rem}.retry-wrap:has(button:not([hidden])){padding-bottom:1rem}a{color:var(--cyan)}.fact dt,.fact dd,.button,.location-copy{font-size:1rem}.source,.brand-sub,.eyebrow,.privacy-note,.history-time,.accuracy{font-size:.8125rem}.history-ip,.history-place{font-size:.875rem}.history-num{font-size:.75rem}.card-head{flex-wrap:wrap}.history-time{white-space:normal;max-width:7rem}.fact{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)}.hero:after{z-index:0}.hero>*{z-index:1}.location-copy{line-height:1.6}
@@ -125,11 +127,11 @@ function buildPage(request) {
     <div class="grid">
       <section class="card" aria-labelledby="connection-title"><div class="card-head"><h2 class="card-title" id="connection-title"><svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12.55a11 11 0 0 1 14.08 0M8.5 16.05a6 6 0 0 1 7 0M12 20h.01M1.5 9a16 16 0 0 1 21 0"/></svg>Connection</h2><span class="source" id="connection-source">This connection</span></div><dl class="facts" id="connection-facts"></dl><p class="card-note" id="network-note" role="status">Reading connection details…</p><div class="retry-wrap"><button class="button" id="retry-network" type="button" hidden>Retry IP lookup</button></div></section>
       <section class="card" aria-labelledby="device-title"><div class="card-head"><h2 class="card-title" id="device-title"><svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>Device & browser</h2><span class="source">Browser-reported</span></div><dl class="facts" id="device-facts"><div class="fact"><dt>Detecting</dt><dd class="skeleton">Reading this browser…</dd></div></dl></section>
-      <section class="card span-2" aria-labelledby="location-title"><div class="card-head"><h2 class="card-title" id="location-title"><svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>Location</h2><span class="source">Permission-controlled</span></div><div class="location-body"><div class="location-callout"><p class="location-copy" id="approximate-location"><strong>Approximate:</strong> ${escapeHtml(current.location)}. This comes from your network connection and may only identify a nearby city. Precise location stays in this browser and is never sent back to the server.</p><button class="button primary" id="location-button" type="button">Use precise location</button><div class="precise" id="precise-location" aria-live="polite"></div></div></div></section>
+      <section class="card span-2" aria-labelledby="location-title"><div class="card-head"><h2 class="card-title" id="location-title"><svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>Location</h2><span class="source">IP estimate · optional GPS</span></div><div class="location-body"><div class="location-callout location-layout"><div><p class="location-copy" id="approximate-location"><strong>Approximate:</strong> ${escapeHtml(current.location)}. This comes from your network connection and may only identify a nearby city. Precise location stays in this browser and is never sent back to the server.</p><button class="button primary" id="location-button" type="button">Use precise location</button><div class="precise" id="precise-location" aria-live="polite"></div></div><figure class="location-map" aria-labelledby="map-title"><div class="map-heading" id="map-title">Approximate area <span>IP estimate</span></div><div class="map-viewport"><p class="map-empty" id="map-empty" role="status">Looking up an approximate location…</p><iframe id="location-map" title="Map of your approximate IP location" aria-describedby="map-caption" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="geolocation 'none'" hidden></iframe></div><figcaption class="map-caption" id="map-caption"><span>Map stays on the IP estimate.</span><a id="map-link" target="_blank" rel="noopener noreferrer" hidden>Open larger map</a></figcaption></figure></div></div></section>
       <section class="card span-2" aria-labelledby="history-title"><div class="card-head"><h2 class="card-title" id="history-title"><svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/></svg>Recent IP history</h2><button class="button danger" id="clear-history" type="button">Clear</button></div><ul class="history-list" id="history-list"></ul></section>
       <details class="card span-2"><summary>Technical details <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></summary><dl class="facts" id="technical-facts"></dl><p class="card-note">Some details are deliberately not exposed by browsers. Exact device model, Wi-Fi name, MAC address, and private IP are not available to this page. Browser and OS labels are estimates from the user agent, which may be reduced or spoofed.</p></details>
     </div>
-    <p class="privacy-note">Recent IP history is stored in a first-party cookie in this browser (up to one year), sent back to this site on visits, and not stored in an app database. Safari may remove it sooner. IPv4 and IPv6 checks connect directly to <a href="https://www.ipify.org/" target="_blank" rel="noopener noreferrer">ipify</a>, which sees the public address used for each check. Both detected address types can appear in your recent history. Missing provider/location details are looked up through <a href="https://ipwhois.io/documentation" target="_blank" rel="noopener noreferrer">ipwho.is</a> using the IP seen by DeviceScope; previous IPs and precise location are never sent to that service.</p>
+    <p class="privacy-note">Recent IP history is stored in a first-party cookie in this browser (up to one year), sent back to this site on visits, and not stored in an app database. Safari may remove it sooner. IPv4 and IPv6 checks connect directly to <a href="https://www.ipify.org/" target="_blank" rel="noopener noreferrer">ipify</a>, which sees the public address used for each check. Both detected address types can appear in your recent history. Missing provider/location details are looked up through <a href="https://ipwhois.io/documentation" target="_blank" rel="noopener noreferrer">ipwho.is</a> using the IP seen by DeviceScope; previous IPs and precise location are never sent to that service. The map loads from <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap contributors</a>, which receives your connection IP and the approximate coordinates shown, never your precise location.</p>
   </main><div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script>
     const DATA=${payload};
@@ -169,6 +171,32 @@ function buildPage(request) {
       else if(/Linux/.test(ua))os="Linux";
       return {browser:found||(/AppleWebKit/.test(ua)?"WebKit / in-app browser":"Not identified"),os};
     }
+    function coordinate(value,limit){
+      if(typeof value!=="number"&&typeof value!=="string")return null;
+      if(typeof value==="string"&&!value.trim())return null;
+      const number=Number(value);
+      return Number.isFinite(number)&&Math.abs(number)<=limit?number:null;
+    }
+    function hasMapCoordinates(){return coordinate(c.latitude,85.0511)!==null&&coordinate(c.longitude,180)!==null}
+    function renderMap(){
+      const frame=$("#location-map"),empty=$("#map-empty"),link=$("#map-link");
+      const available=hasMapCoordinates();
+      frame.hidden=!available;empty.hidden=available;link.hidden=!available;
+      if(!available){
+        empty.textContent=lookupState==="loading"?"Looking up an approximate location…":"An approximate map location is not available for this connection.";
+        return;
+      }
+      // Keep a regional view and round IP coordinates; GPS never enters the map.
+      const lat=Number(Number(c.latitude).toFixed(2)),lon=Number(Number(c.longitude).toFixed(2));
+      const west=Math.max(-180,lon-.24),east=Math.min(180,lon+.24);
+      const south=Math.max(-85.0511,lat-.14),north=Math.min(85.0511,lat+.14);
+      const url=new URL("https://www.openstreetmap.org/export/embed.html");
+      url.searchParams.set("bbox",[west,south,east,north].map(n=>n.toFixed(5)).join(","));
+      url.searchParams.set("layer","mapnik");
+      url.searchParams.set("marker",lat+","+lon);
+      if(frame.src!==url.href)frame.src=url.href;
+      link.href="https://www.openstreetmap.org/?mlat="+lat+"&mlon="+lon+"#map=10/"+lat+"/"+lon;
+    }
     function renderConnection(){
       const entry=performance.getEntriesByType?.("navigation")?.[0];
       const protocol=entry?.nextHopProtocol||null;
@@ -196,6 +224,7 @@ function buildPage(request) {
       $("#network-note").textContent=(lookupMessage?lookupMessage+" ":"")+(!connection?"This browser does not expose Wi-Fi/cellular type, downlink estimates, or data-saver status. ":"")+"IP details may describe a VPN or iCloud Private Relay exit, not your physical network. Page response wait is not a speed test.";
       $("#retry-network").hidden=lookupState!=="failed";
       $("#approximate-location").textContent="Approximate: "+(c.location!=="Unknown location"?c.location:(lookupState==="loading"?"looking up your IP…":"not determined"))+". IP-based location is an estimate, not GPS. A VPN or Private Relay can change it. Precise location requires permission and stays on this page.";
+      renderMap();
     }
     function renderDevice(){
       const info=browserInfo();
@@ -296,7 +325,7 @@ function buildPage(request) {
         c.organization=c.organization||safe(result.connection?.isp)||safe(result.connection?.org);
         c.asn=c.asn||(Number.isSafeInteger(result.connection?.asn)?result.connection.asn:null);
         for(const [key,value]of Object.entries({city:result.city,region:result.region,regionCode:result.region_code,country:result.country_code,continent:result.continent_code,postalCode:result.postal,timezone:result.timezone?.id})){c[key]=c[key]||safe(value)}
-        for(const key of ["latitude","longitude"]){if(c[key]===null&&Number.isFinite(result[key]))c[key]=result[key]}
+        if(!hasMapCoordinates()&&coordinate(result.latitude,85.0511)!==null&&coordinate(result.longitude,180)!==null){c.latitude=result.latitude;c.longitude=result.longitude}
         c.location=[c.city,c.region,c.country].filter(Boolean).join(", ")||"Unknown location";
         networkSource="IP lookup + browser";lookupState="done";lookupMessage="Provider and location: ipwho.is.";
         const existing=DATA.history.find(item=>item.i===c.ip);
@@ -341,7 +370,7 @@ function buildPage(request) {
     window.addEventListener("offline",()=>{renderConnection();renderDevice()});
     window.addEventListener("load",renderConnection);
     connection?.addEventListener?.("change",renderConnection);
-    if(!c.organization||!c.asn||c.location==="Unknown location")lookupNetwork();
+    if(!c.organization||!c.asn||c.location==="Unknown location"||!hasMapCoordinates())lookupNetwork();
     checkAddresses();
   </script>
 </body></html>`, history };
@@ -362,7 +391,7 @@ export default {
     const { html, history } = buildPage(request);
     return new Response(html, { headers: {
       "content-type": "text/html; charset=utf-8", "cache-control": "private, no-store, max-age=0",
-      "content-security-policy": "default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://ipwho.is https://api.ipify.org https://api6.ipify.org; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
+      "content-security-policy": "default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://ipwho.is https://api.ipify.org https://api6.ipify.org; frame-src https://www.openstreetmap.org; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
       "permissions-policy": "geolocation=(self), camera=(), microphone=()", "referrer-policy": "no-referrer", "x-content-type-options": "nosniff",
       "set-cookie": HISTORY_COOKIE + "=" + encodeURIComponent(JSON.stringify(history)) + "; Max-Age=31536000; Path=/; Secure; SameSite=Lax",
     }});
