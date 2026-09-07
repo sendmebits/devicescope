@@ -40,6 +40,7 @@ assert.equal(response.status,200);
 assert.ok(response.headers.get("set-cookie").startsWith("devicescope_history="));
 assert.ok(response.headers.get("cache-control").includes("no-store"));
 assert.ok(response.headers.get("content-security-policy").includes("https://ipwho.is"));
+assert.ok(html.indexOf('aria-labelledby="location-title"')<html.indexOf('aria-labelledby="connection-title"'));
 const client=await runClient(html);
 const network=client.elements.get("#connection-facts").innerHTML;
 assert.ok(network.includes("Fixture ISP")&&network.includes("AS1234")&&network.includes("Toronto"));
