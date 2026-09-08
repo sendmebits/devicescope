@@ -56,7 +56,7 @@ assert.ok(client.cookies.has("devicescope_history"));
 await client.elements.get("#location-button").click();
 assert.ok(client.elements.get("#precise-location").textContent.includes("permission was not allowed"));
 assert.equal(client.elements.get("#location-button").disabled,false);
-await client.elements.get("#copy-ip").click();
+await client.elements.get("#copy-ipv4").click();
 assert.ok(client.elements.get("#toast").textContent.includes("Copy unavailable"));
 client.elements.get("#clear-history").click();
 assert.equal(client.cookies.size,0);
