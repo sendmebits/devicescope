@@ -1,2 +1,21 @@
+# Build artifacts
 dist/
 site.tar.gz
+
+# Secrets and local config
+.env
+.env.*
+!.env.example
+
+# Keys and certificates
+*.pem
+*.key
+*.p12
+*.pfx
+
+# ChatGPT Sites local linkage (project_id is account-specific)
+.openai/hosting.json
+
+# Dependencies and OS
+node_modules/
+.DS_Store
