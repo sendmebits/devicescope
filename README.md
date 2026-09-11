@@ -1,26 +1,38 @@
-# Sites Worker ESM starter
+<div align="center">
 
-Use this starter for a static microsite, click counter, or simple internal UI whose state is browser-scoped. It has no dependencies and needs no install.
+# DeviceScope
 
-Edit `worker/index.js`. Use the Sites checkpoint when a coherent milestone is ready to inspect or share; the remote builder then runs the checked-in build and validation scripts. Do not run them as a normal pre-checkpoint step.
+See what a website can learn about your device and connection.
 
-The build copies only `worker/index.js` and `.openai/hosting.json`. Do not add standalone asset files. Embed any essential raster bytes in `worker/index.js` and serve or reference them as a data URL.
+![JavaScript](https://img.shields.io/badge/JavaScript-ESM-20232a?logo=javascript&logoColor=f7df1e)
+![Cloudflare Workers](https://img.shields.io/badge/runtime-Cloudflare%20Workers-f38020?logo=cloudflare&logoColor=white)
+![Dependencies](https://img.shields.io/badge/dependencies-none-2ea44f)
 
-For targeted diagnosis after a remote build failure, the same commands are available in the Sites Linux environment:
+</div>
+
+DeviceScope shows the public IPv4 and IPv6 addresses, approximate network location, provider, browser, OS, display, and other details exposed to a website. Precise location is optional and stays in the browser.
+
+Recent IPs are kept in a first-party cookie. There is no app database.
+
+## Build
+
+Requires Node.js 18 or newer. No install step is needed.
 
 ```sh
-bash scripts/build.sh
-node scripts/validate-artifact.mjs
+npm run build
+npm run validate
 ```
 
-The deterministic build produces:
+Run the device and privacy checks with:
 
-```text
-dist/
-├── .openai/
-│   └── hosting.json
-└── server/
-    └── index.js
+```sh
+node scripts/test-device.mjs
 ```
 
-`dist/server/index.js` is an ES module with a default export containing `fetch(request, env, ctx)`. Edit `worker/index.js`, not the generated file under `dist/`.
+The source is [`worker/index.js`](worker/index.js). The build outputs a deployable Cloudflare Worker to `dist/`.
+
+## Data sources
+
+- [ipify](https://www.ipify.org/) checks IPv4 and IPv6 separately.
+- [ipwho.is](https://ipwhois.io/) provides network and approximate location data when hosting metadata is unavailable.
+- [OpenStreetMap](https://www.openstreetmap.org/copyright) displays the approximate area.
